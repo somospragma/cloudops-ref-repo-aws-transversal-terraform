@@ -9,7 +9,7 @@ module "vpc" {
   client      = var.client
   project     = var.project
   environment = var.environment
-  region      = var.aws_region
+  aws_region  = var.aws_region
 
   cidr_block                 = var.cidr_block
   instance_tenancy           = var.instance_tenancy
@@ -87,6 +87,7 @@ module "vpc_endpoints" {
   endpoint_config = [
     # S3 Endpoint (Gateway type)
     {
+      enable              = true
       vpc_id              = module.vpc.vpc_id
       service_name        = "com.amazonaws.us-east-1.s3"
       vpc_endpoint_type   = "Gateway"
@@ -99,6 +100,7 @@ module "vpc_endpoints" {
 
     # EC2 Endpoint (Interface type)
     {
+      enable             = true
       vpc_id              = module.vpc.vpc_id
       service_name        = "com.amazonaws.us-east-1.secretsmanager"
       vpc_endpoint_type   = "Interface"
@@ -107,19 +109,20 @@ module "vpc_endpoints" {
       subnet_ids          = [module.vpc.subnet_ids["private-0"], module.vpc.subnet_ids["private-0"], ]
       route_table_ids     = []
       application         = "sm"
-    },
+    }#,
 
     # DynamoDB Endpoint (Gateway type)
-    {
-      vpc_id              = module.vpc.vpc_id
-      service_name        = "com.amazonaws.us-east-1.dynamodb"
-      vpc_endpoint_type   = "Gateway"
-      private_dns_enabled = false
-      security_group_ids  = []
-      subnet_ids          = []
-      route_table_ids     = [module.vpc.route_table_ids["private"], module.vpc.route_table_ids["service"], module.vpc.route_table_ids["database"]]
-      application         = "dynamodb"
-    }
+    # {
+    #   enable              = true
+    #   vpc_id              = module.vpc.vpc_id
+    #   service_name        = "com.amazonaws.us-east-1.dynamodb"
+    #   vpc_endpoint_type   = "Gateway"
+    #   private_dns_enabled = false
+    #   security_group_ids  = []
+    #   subnet_ids          = []
+    #   route_table_ids     = [module.vpc.route_table_ids["private"], module.vpc.route_table_ids["service"], module.vpc.route_table_ids["database"]]
+    #   application         = "dynamodb"
+    # }
   ]
   depends_on = [module.security_groups, module.vpc]
 }
