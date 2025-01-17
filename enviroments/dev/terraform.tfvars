@@ -1,55 +1,59 @@
-###############################################################
-# Variables Globales
-###############################################################
-#
-aws_region="us-east-1"
+###########################################
+########## Common variables ###############
+###########################################
 
-#
-profile="pra_idp_dev"
-
-#
+profile     = "profile01"
+aws_region  = "us-east-1"
 environment = "dev"
-
-#
-client = "pragma"
-
-#
-project = "fc"
-
-#
+client      = "cliente01"
+project     = "proyecto01"
 common_tags = {
   environment   = "dev"
-  project-name  = "Modulos Referencia"
-  cost-center   = "-"
-  owner         = "cristian.noguera@pragma.com.co"
-  area          = "KCCC"
-  provisioned   = "terraform"
-  datatype      = "interno"
+  project-name  = "proyecto01"
+  cost-center   = "xxx"
+  owner         = "xxx"
+  area          = "xxx"
+  provisioned   = "xxx"
+  datatype      = "xxx"
 }
 
-###############################################################
-# Variables Definicion VPC
-###############################################################
-cidr_block                 = "10.60.0.0/22"   # Variable
-instance_tenancy           = "default"        # Fijo
-enable_dns_support         = true             # Fijo
-enable_dns_hostnames       = true # Fijo
-flow_log_retention_in_days = 60 # Variable
-create_igw = true # Fijo
-create_nat = true # Fijo
+###########################################
+############ VPC variables ################
+###########################################
+
+cidr_block                 = "10.60.0.0/22"   
+instance_tenancy           = "default"        
+enable_dns_support         = true             
+enable_dns_hostnames       = true 
+
+###########################################
+############### IGW variables #############
+###########################################
+
+create_igw = true
+
+###########################################
+############### NAT variables #############
+###########################################
+
+create_nat = true
+
+###########################################
+############# Subnet variables ############
+###########################################
 
 subnet_config = {
   public = {
-    public      = true # Fijo
-    include_nat = false # Fijo
+    public      = true
+    include_nat = false
     subnets = [
       {
-        cidr_block        = "10.60.0.0/26" # Variable
-        availability_zone = "a" # Variable
+        cidr_block        = "10.60.0.0/26"
+        availability_zone = "a"
       },
       {
-        cidr_block        = "10.60.0.64/26" # Variable
-        availability_zone = "b" # Variable
+        cidr_block        = "10.60.0.64/26"
+        availability_zone = "b"
       }
     ]
     custom_routes = [
@@ -104,3 +108,17 @@ subnet_config = {
     ]
   }
 }
+
+###########################################
+########### Flow logs variables ###########
+###########################################
+
+flow_log_retention_in_days = 60
+
+###########################################
+######## VPC Endpoint variables ###########
+###########################################
+
+enable_dynamodb_endpoint = true
+enable_s3_endpoint = true
+enable_sm_endpoint = true

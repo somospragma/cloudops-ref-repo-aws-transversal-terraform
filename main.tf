@@ -1,6 +1,7 @@
-################################################################
-# Module VPC  
-################################################################
+###########################################
+############## VPC Module #################
+###########################################
+
 module "vpc" {
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-vpc-terraform.git?ref=main"
   providers = {
@@ -23,13 +24,11 @@ module "vpc" {
   create_nat = var.create_nat
 }
 
-
-################################################################
-# Module VPC Security Groups
-################################################################
+###########################################
+######### Security Group Module ###########
+###########################################
 
 module "security_groups" {
-  #source = "../../module/sg"
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-sg-terraform.git?ref=feature/sg-module-init"
   providers = {
     aws.project = aws.pra_idp_dev
@@ -72,9 +71,10 @@ module "security_groups" {
   depends_on = [module.vpc]
 }
 
-################################################################
-# Module VPC Endpoint 
-################################################################
+###########################################
+########## VPC Endpoint Module ############
+###########################################
+
 module "vpc_endpoints" {
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-vpc-endpoint-terraform.git?ref=feature/vpce-module-init"
   providers = {
@@ -85,9 +85,21 @@ module "vpc_endpoints" {
   project     = var.project
 
   endpoint_config = [
+    # DynamoDB Endpoint (Gateway type)
+    {
+      enable              = var.enable_dynamodb_endpoint
+      vpc_id              = module.vpc.vpc_id
+      service_name        = "com.amazonaws.us-east-1.dynamodb"
+      vpc_endpoint_type   = "Gateway"
+      private_dns_enabled = false
+      security_group_ids  = []
+      subnet_ids          = []
+      route_table_ids     = [module.vpc.route_table_ids["private"], module.vpc.route_table_ids["service"], module.vpc.route_table_ids["database"]]
+      application         = "dynamodb"
+    },
     # S3 Endpoint (Gateway type)
     {
-      enable              = true
+      enable              = var.enable_s3_endpoint
       vpc_id              = module.vpc.vpc_id
       service_name        = "com.amazonaws.us-east-1.s3"
       vpc_endpoint_type   = "Gateway"
@@ -97,10 +109,9 @@ module "vpc_endpoints" {
       route_table_ids     = [module.vpc.route_table_ids["private"], module.vpc.route_table_ids["service"], module.vpc.route_table_ids["database"]]
       application         = "s3"
     },
-
-    # EC2 Endpoint (Interface type)
+    # SM Endpoint (Interface type)
     {
-      enable             = true
+      enable              = var.enable_sm_endpoint
       vpc_id              = module.vpc.vpc_id
       service_name        = "com.amazonaws.us-east-1.secretsmanager"
       vpc_endpoint_type   = "Interface"
@@ -109,20 +120,7 @@ module "vpc_endpoints" {
       subnet_ids          = [module.vpc.subnet_ids["private-0"], module.vpc.subnet_ids["private-0"], ]
       route_table_ids     = []
       application         = "sm"
-    }#,
-
-    # DynamoDB Endpoint (Gateway type)
-    # {
-    #   enable              = true
-    #   vpc_id              = module.vpc.vpc_id
-    #   service_name        = "com.amazonaws.us-east-1.dynamodb"
-    #   vpc_endpoint_type   = "Gateway"
-    #   private_dns_enabled = false
-    #   security_group_ids  = []
-    #   subnet_ids          = []
-    #   route_table_ids     = [module.vpc.route_table_ids["private"], module.vpc.route_table_ids["service"], module.vpc.route_table_ids["database"]]
-    #   application         = "dynamodb"
-    # }
+    }
   ]
   depends_on = [module.security_groups, module.vpc]
 }
