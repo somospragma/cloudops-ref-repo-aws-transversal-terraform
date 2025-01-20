@@ -117,7 +117,7 @@ module "vpc_endpoints" {
       vpc_endpoint_type   = "Interface"
       private_dns_enabled = true
       security_group_ids  = [module.security_groups.sg_info["sm"].sg_id]
-      subnet_ids          = [module.vpc.subnet_ids["private-0"], module.vpc.subnet_ids["private-0"], ]
+      subnet_ids          = [module.vpc.subnet_ids["private-0"], module.vpc.subnet_ids["private-1"], ]
       route_table_ids     = []
       application         = "sm"
     }
