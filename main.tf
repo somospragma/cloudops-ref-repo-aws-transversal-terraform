@@ -3,6 +3,7 @@
 ###########################################
 
 module "vpc" {
+  #Before using the module, once you have the new location of your repo, you need to change the source value.
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-vpc-terraform.git?ref=main"
   providers = {
     aws.project = aws.pra_idp_dev
@@ -29,6 +30,7 @@ module "vpc" {
 ###########################################
 
 module "security_groups" {
+  #Before using the module, once you have the new location of your repo, you need to change the source value.
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-sg-terraform.git?ref=feature/sg-module-init"
   providers = {
     aws.project = aws.pra_idp_dev
@@ -76,6 +78,7 @@ module "security_groups" {
 ###########################################
 
 module "vpc_endpoints" {
+  #Before using the module, once you have the new location of your repo, you need to change the source value.
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-vpc-endpoint-terraform.git?ref=feature/vpce-module-init"
   providers = {
     aws.project = aws.pra_idp_dev
