@@ -37,6 +37,7 @@ variable "project" {
 ###########################################
 ############ VPC variables ################
 ###########################################
+
 variable "cidr_block" {
   type = string
   description = "The IPv4 CIDR block for the VPC"
