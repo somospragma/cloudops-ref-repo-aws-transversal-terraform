@@ -19,7 +19,7 @@ metadata:
     security groups:
       Crear security groups, en este caso para aquellos vpc endpoints que lo requieran.
   annotations:
-    backstage.io/managed-by-location: https://github.com/somospragma/cloudops-ref-repo-aws-transversal-terraform/blob/feature/transversal-module-init/catalog.info.yml
+    backstage.io/managed-by-location: https://github.com/somospragma/cloudops-ref-repo-aws-transversal-terraform/blob/main/catalog.info.yml
     backstage.io/techdocs-ref: dir:.
 spec:
   type: IaC
