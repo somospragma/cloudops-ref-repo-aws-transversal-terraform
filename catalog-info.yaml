@@ -29,5 +29,3 @@ spec:
     - component:default/cloudops-ref-repo-aws-vpc-terraform
     - component:default/cloudops-ref-repo-aws-vpc-endpoint-terraform
     - component:default/cloudops-ref-repo-aws-sg-terraform
-  dependencyOf:
-    - component:default/cloudops-ref-repo-aws-vpc-endpoint-terraform
